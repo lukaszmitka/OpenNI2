@@ -176,10 +176,10 @@ XnStatus XnSensorStreamHelper::MapFirmwareProperty(XnActualIntProperty& Property
 	XnStatus nRetVal = XN_STATUS_OK;
 
 	// init data
-	XnSensorStreamHelperCookie cookie(&Property, &FirmwareProperty, bAllowChangeWhileOpen, pStreamToFirmwareFunc);
+	XnSensorStreamHelperCookie *cookie = new XnSensorStreamHelperCookie(&Property, &FirmwareProperty, bAllowChangeWhileOpen, pStreamToFirmwareFunc);
 
 	// add it to the list
-	nRetVal = m_FirmwareProperties.Set(&Property, cookie);
+	nRetVal = m_FirmwareProperties.Set(&Property, *cookie);
 	XN_IS_STATUS_OK(nRetVal);
 
 	return (XN_STATUS_OK);

@@ -49,7 +49,10 @@ XnStatus XnStringProperty::ReadValueFromFile(const XnChar* csINIFile, const XnCh
 
 XnStatus XnStringProperty::CopyValueImpl(void* pDest, const void* pSource) const
 {
-	strncpy((char*)pDest, (const char*)pSource, XN_DEVICE_MAX_STRING_LENGTH);
+	int len = strlen((char*)pDest);
+	if (len > XN_DEVICE_MAX_STRING_LENGTH)
+		len = XN_DEVICE_MAX_STRING_LENGTH;
+	memcpy((char*)pDest, (const char*)pSource, len - 1);
 	return XN_STATUS_OK;
 }
 
@@ -72,7 +75,10 @@ XnStatus XnStringProperty::CallGetCallback(XnProperty::GetFuncPtr pFunc, void* p
 
 XnBool XnStringProperty::ConvertValueToString(XnChar* csValue, const void* pValue) const
 {
-	strncpy(csValue, (const XnChar*)pValue, XN_DEVICE_MAX_STRING_LENGTH);
+	int len = strlen(csValue);
+	if (len > XN_DEVICE_MAX_STRING_LENGTH)
+		len = XN_DEVICE_MAX_STRING_LENGTH;
+	memcpy(csValue, (const XnChar*)pValue, len - 1);
 	return TRUE;
 }
 

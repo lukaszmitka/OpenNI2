@@ -1025,7 +1025,10 @@ XnStatus XnDeviceBase::DestroyStream(const XnChar* StreamName)
 
 	// keep the stream name (we now delete the module, so the name will be lost)
 	XnChar strStreamName[XN_DEVICE_MAX_STRING_LENGTH];
-	strncpy(strStreamName, StreamName, XN_DEVICE_MAX_STRING_LENGTH);
+	int len = strlen(strStreamName);
+	if (len > XN_DEVICE_MAX_STRING_LENGTH)
+		len = XN_DEVICE_MAX_STRING_LENGTH;
+	memcpy(strStreamName, StreamName, len - 1);
 
 	xnl::AutoCSLocker lock(m_hLock);
 

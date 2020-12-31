@@ -29,7 +29,10 @@
 XnActualStringProperty::XnActualStringProperty(XnUInt32 propertyId, const XnChar* strName, const XnChar* strInitialValue /* = "" */, const XnChar* strModule /* = "" */ ) :
 	XnStringProperty(propertyId, strName, m_strValue, strModule)
 {
-	strncpy(m_strValue, strInitialValue, XN_DEVICE_MAX_STRING_LENGTH);
+	int len = strlen(m_strValue);
+	if (len > XN_DEVICE_MAX_STRING_LENGTH)
+		len = XN_DEVICE_MAX_STRING_LENGTH;
+	memcpy(m_strValue, strInitialValue, len - 1);
 	// set a callback for get operations
 	UpdateGetCallback(GetCallback, this);
 }
@@ -41,6 +44,9 @@ XnStatus XnActualStringProperty::SetCallback(XnActualStringProperty* pSender, co
 
 XnStatus XnActualStringProperty::GetCallback(const XnActualStringProperty* pSender, XnChar* csValue, void* /*pCookie*/)
 {
-	strncpy(csValue, pSender->GetValue(), XN_DEVICE_MAX_STRING_LENGTH);
+	int len = strlen(csValue);
+	if (len > XN_DEVICE_MAX_STRING_LENGTH)
+		len = XN_DEVICE_MAX_STRING_LENGTH;
+	memcpy(csValue, pSender->GetValue(), len - 1);
 	return XN_STATUS_OK;
 }

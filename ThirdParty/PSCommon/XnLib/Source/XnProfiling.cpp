@@ -217,7 +217,10 @@ XN_C_API XnStatus xnProfilingSectionStart(const char* csSectionName, XnBool bMT,
 			for (nChar = 0; nChar < gt_nStackDepth*2; ++nChar)
 				pSection->csName[nChar] = ' ';
 
-			strncpy(pSection->csName + nChar, csSectionName, MAX_SECTION_NAME);
+			int len = strlen(pSection->csName) + nChar;
+			if (len>MAX_SECTION_NAME)
+				len = MAX_SECTION_NAME;
+			memcpy(pSection->csName + nChar, csSectionName, len - 1);
 
 			if (strlen(pSection->csName) > g_ProfilingData.nMaxSectionName)
 				g_ProfilingData.nMaxSectionName = strlen(pSection->csName);

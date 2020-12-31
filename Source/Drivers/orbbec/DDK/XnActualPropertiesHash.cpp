@@ -28,7 +28,10 @@
 
 XnActualPropertiesHash::XnActualPropertiesHash(const XnChar* strName)
 {
-	strncpy(m_strName, strName, XN_DEVICE_MAX_STRING_LENGTH);
+	int len = strlen(m_strName);
+	if (len > XN_DEVICE_MAX_STRING_LENGTH)
+		len = XN_DEVICE_MAX_STRING_LENGTH;
+	memcpy(m_strName, strName, len - 1);
 }
 
 XnActualPropertiesHash::~XnActualPropertiesHash()
@@ -190,7 +193,10 @@ XnStatus XnActualPropertiesHash::CopyFrom(const XnActualPropertiesHash& other)
 	XnStatus nRetVal = XN_STATUS_OK;
 
 	Clear();
-	strncpy(m_strName, other.m_strName, XN_DEVICE_MAX_STRING_LENGTH);
+	int len = strlen(m_strName);
+	if (len > XN_DEVICE_MAX_STRING_LENGTH)
+		len = XN_DEVICE_MAX_STRING_LENGTH;
+	memcpy(m_strName, other.m_strName, len - 1);
 
 	for (ConstIterator it = other.Begin(); it != other.End(); ++it)
 	{
